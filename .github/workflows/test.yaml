@@ -16,4 +16,5 @@ jobs:
       - name: Run Docker Compose
         run: |
           docker-compose up -d 
+          sleep 10
           docker exec sample_dev bash -c "cd /work && go test -v ./..."
