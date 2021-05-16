@@ -1,0 +1,12 @@
+FROM golang:1.16.4-buster as builder
+
+WORKDIR /work
+
+COPY go.mod .
+COPY go.sum .
+COPY *.go ./
+RUN go build -o main *.go
+
+FROM gcr.io/distroless/base-debian10
+COPY --from=builder /work/main /main
+CMD ["/main"]

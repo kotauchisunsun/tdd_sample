@@ -1,0 +1,19 @@
+name: Testing Pipeline
+on:
+  push:
+    branches: 
+      - master
+
+jobs:
+  code_testing:
+    name: Code Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@master
+
+      - name: Run Docker Compose
+        run: |
+          docker-compose up -d 
+          docker exec sample_dev bash -c "cd /work && go test -v ./..."

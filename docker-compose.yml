@@ -1,0 +1,34 @@
+version: '2'
+services:
+  dev:
+    container_name: sample_dev
+    image: golang:1.16.4-buster
+    environment:
+      - DB_HOST=database:3306
+      - DB_USER=api_user
+      - DB_PASSWORD=api_password
+      - DB_DATABASE=sample
+    volumes:
+      - ./:/work
+    tty: true
+  database:
+    container_name: sample_database
+    image: mysql:5.7.34
+    ports:
+      - 23306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=sample
+      - MYSQL_USER=api_user
+      - MYSQL_PASSWORD=api_password
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+  api:
+    build:
+      dockerfile: Dockerfile.api
+      context: .
+    environment:
+        - DB_HOST=database:3306
+        - DB_USER=api_user
+        - DB_PASSWORD=api_password
+        - DB_DATABASE=sample
